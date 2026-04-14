@@ -109,20 +109,32 @@ function PracticeScreen({
 	onExpire: () => void;
 	onTryAgain: () => void;
 }) {
+	const [imageLoaded, setImageLoaded] = useState(false);
+
 	const expiryTimestamp = useState(() => {
 		const time = new Date();
 		time.setSeconds(time.getSeconds() + 60);
 		return time;
 	})[0];
 
-	const { seconds, minutes } = useTimer({
+	const { seconds, minutes, restart } = useTimer({
 		expiryTimestamp,
 		onExpire,
-		autoStart: true,
+		autoStart: false,
 	});
 
+	const handleImageLoaded = useCallback(() => {
+		setImageLoaded(true);
+		const time = new Date();
+		time.setSeconds(time.getSeconds() + 60);
+		restart(time);
+	}, [restart]);
+
 	const isExpired = sessionState === "expired";
-	const formattedTime = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+	const timerReady = imageLoaded || isExpired;
+	const formattedTime = timerReady
+		? `${minutes}:${seconds.toString().padStart(2, "0")}`
+		: "1:00";
 	const wordCount = response.trim() ? response.trim().split(/\s+/).length : 0;
 
 	return (
@@ -164,6 +176,7 @@ function PracticeScreen({
 								alt="Describe this image"
 								width={800}
 								height={600}
+								onLoad={handleImageLoaded}
 								className="h-full w-full object-cover"
 							/>
 						</div>
@@ -187,7 +200,7 @@ function PracticeScreen({
 							placeholder="Your response"
 							value={response}
 							onChange={(e) => onResponseChange(e.target.value)}
-							disabled={isExpired}
+							disabled={isExpired || !imageLoaded}
 							className="min-h-[300px] flex-1 resize-none rounded-xl border border-border bg-background text-xl md:text-xl shadow-sm"
 						/>
 						<p className="text-right text-xs text-muted-foreground">
