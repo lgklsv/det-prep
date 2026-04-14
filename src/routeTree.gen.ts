@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WriteAboutPhotoRouteImport } from './routes/write-about-photo'
+import { Route as SpeakAboutPhotoRouteImport } from './routes/speak-about-photo'
 import { Route as IndexRouteImport } from './routes/index'
 
 const WriteAboutPhotoRoute = WriteAboutPhotoRouteImport.update({
   id: '/write-about-photo',
   path: '/write-about-photo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SpeakAboutPhotoRoute = SpeakAboutPhotoRouteImport.update({
+  id: '/speak-about-photo',
+  path: '/speak-about-photo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,27 +31,31 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/speak-about-photo': typeof SpeakAboutPhotoRoute
   '/write-about-photo': typeof WriteAboutPhotoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/speak-about-photo': typeof SpeakAboutPhotoRoute
   '/write-about-photo': typeof WriteAboutPhotoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/speak-about-photo': typeof SpeakAboutPhotoRoute
   '/write-about-photo': typeof WriteAboutPhotoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/write-about-photo'
+  fullPaths: '/' | '/speak-about-photo' | '/write-about-photo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/write-about-photo'
-  id: '__root__' | '/' | '/write-about-photo'
+  to: '/' | '/speak-about-photo' | '/write-about-photo'
+  id: '__root__' | '/' | '/speak-about-photo' | '/write-about-photo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SpeakAboutPhotoRoute: typeof SpeakAboutPhotoRoute
   WriteAboutPhotoRoute: typeof WriteAboutPhotoRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/write-about-photo'
       fullPath: '/write-about-photo'
       preLoaderRoute: typeof WriteAboutPhotoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/speak-about-photo': {
+      id: '/speak-about-photo'
+      path: '/speak-about-photo'
+      fullPath: '/speak-about-photo'
+      preLoaderRoute: typeof SpeakAboutPhotoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SpeakAboutPhotoRoute: SpeakAboutPhotoRoute,
   WriteAboutPhotoRoute: WriteAboutPhotoRoute,
 }
 export const routeTree = rootRouteImport
