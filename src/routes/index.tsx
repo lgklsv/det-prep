@@ -1,17 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
+import { SkillCard } from "@/components/skill-card";
+import { skills } from "@/lib/skills";
 
-export const Route = createFileRoute("/")({ component: App });
+export const Route = createFileRoute("/")({ component: HomePage });
 
-function App() {
+function HomePage() {
 	return (
-		<div className="flex min-h-svh p-6">
-			<div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-				<div>
-					<h1 className="font-medium">Project ready!</h1>
-					<p>You may now add components and start building.</p>
-					<p>We&apos;ve already added the button component for you.</p>
-					<Button className="mt-2">Button</Button>
+		<div className="flex min-h-svh flex-col items-center px-6 py-12">
+			<div className="w-full max-w-3xl">
+				<h1 className="text-3xl font-bold tracking-tight">DET Practice</h1>
+				<p className="mt-2 text-muted-foreground">Choose a skill to practice</p>
+				<div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+					{skills.map((skill) => (
+						<SkillCard key={skill.id} skill={skill} />
+					))}
 				</div>
 			</div>
 		</div>

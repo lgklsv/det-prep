@@ -9,8 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WriteAboutPhotoRouteImport } from './routes/write-about-photo'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WriteAboutPhotoRoute = WriteAboutPhotoRouteImport.update({
+  id: '/write-about-photo',
+  path: '/write-about-photo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +25,39 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/write-about-photo': typeof WriteAboutPhotoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/write-about-photo': typeof WriteAboutPhotoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/write-about-photo': typeof WriteAboutPhotoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/write-about-photo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/write-about-photo'
+  id: '__root__' | '/' | '/write-about-photo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  WriteAboutPhotoRoute: typeof WriteAboutPhotoRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/write-about-photo': {
+      id: '/write-about-photo'
+      path: '/write-about-photo'
+      fullPath: '/write-about-photo'
+      preLoaderRoute: typeof WriteAboutPhotoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +70,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  WriteAboutPhotoRoute: WriteAboutPhotoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
